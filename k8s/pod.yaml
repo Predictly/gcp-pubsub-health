@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gcp-pubsub-health
+spec:
+  containers:
+  - name: gcp-pubsub-health
+    image: gcp-pubsub-health:local
+    ports:
+    - name: web
+      containerPort: 8080
+      protocol: TCP
+    resources:
+      limits:
+        cpu: "400m"
+        memory: "400Mi"
+      requests:
+        cpu: "400m"
+        memory: "400Mi"
+    livenessProbe:
+      httpGet:
+        path: /actuator/health
+        port: web
+      initialDelaySeconds: 25
+      periodSeconds: 30
+      timeoutSeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /actuator/health
+        port: web
+      initialDelaySeconds: 25
+      periodSeconds: 30
+      timeoutSeconds: 10
